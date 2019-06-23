@@ -1,6 +1,6 @@
 **Product-Memorizer**  
 -> Learned to use dynamic allocation for Arrays  
--> Practice to use functions and structs
+-> Practice to use functions and structs  
 -> Learning how to use GitHub  
 
 **Future Implementations**  
