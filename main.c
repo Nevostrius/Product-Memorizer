@@ -12,7 +12,7 @@ int main()
     handle national_products;
     national_products.allocation = START;
     national_products.count = 0;
-    national_products->product=NULL;
+    national_products.product = NULL;
 
     choose(&national_products);
 }
