@@ -1,3 +1,3 @@
-**Product-Memorizer** <br/>
--> Learned to use dynamic allocation for Arrays <br/>
+**Product-Memorizer**  
+-> Learned to use dynamic allocation for Arrays  
 -> Practice to use functions and structs
