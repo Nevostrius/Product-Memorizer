@@ -1,2 +1,2 @@
--> Learned to use dynamic allocation for Arrays \n
+-> Learned to use dynamic allocation for Arrays <br/>
 -> Practice to use functions and structs
