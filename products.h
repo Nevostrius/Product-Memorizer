@@ -134,9 +134,10 @@ void choose(handle *dh)
              delete_entries(dh);
              break;
     }
-
     }
     while(choice != 'Q');
+
+    free(dh->product);
 }
 
 #endif
