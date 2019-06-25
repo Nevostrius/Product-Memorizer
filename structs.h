@@ -3,8 +3,10 @@
 
 typedef struct
 {
+    char product_name[20];
     int id;
     double weight;
+    unsigned int stock;
 }article;
 
 typedef struct

@@ -1,15 +1,9 @@
 #ifndef PRODUCTS_H_INCLUDED
 #define PRODUCTS_H_INCLUDED
 
-int test_choose(char *choice)
-{
-    *choice = toupper(*choice);
-    return (*choice);
-}
-
 void enter(handle *dh)
 {
-
+    //Allocate Memory to Array product
     if(dh->product == NULL)
     {
         printf("No memory allocated, allocating memory... \n");
@@ -18,6 +12,7 @@ void enter(handle *dh)
         printf("Memory in the size %d allocated... you may add products to memory\n\n", dh->allocation);
     }
 
+    //Reallocate Memory for Array product if necessary
     if(dh->count+1 > dh->allocation)
     {
         printf("\nResizing memory necessary...\n");
@@ -27,11 +22,16 @@ void enter(handle *dh)
         printf("Memory successfully reallocated. Memory can currently hold %d items\n", dh->allocation);
     }
 
-    printf("Enter product ID Number: ");
-    scanf(" %d", &dh->product[dh->count].id);
+    //Enter Product Info
+    printf("Enter Product Name: ");
+    fgets(dh->product[dh->count].product_name, 20, stdin);
+    fflush(stdin);
+    unique_product_id(dh);
     printf("Enter product weight: ");
     scanf(" %lf", &dh->product[dh->count].weight);
-    printf("\nProduct ID: %d Weight: %.2lf added.\n", dh->product[dh->count].id, dh->product[dh->count].weight);
+    printf("Enter your product stock: ");
+    scanf(" %u", &dh->product[dh->count].stock);
+    printf("\nProduct with ID %d added.\n", dh->product[dh->count].id);
     dh->count++;
     printf("%d Elements in memory\n\n", dh->count);
 }
@@ -40,9 +40,11 @@ void show(handle *dh)
 {
     for(int i=0; i<dh->count; i++)
     {
-        printf("\nMemory of at position %d\n", i+1);
+        printf("\nMemory of product list at position %d\n", i+1);
+        printf("Product Name = %s", dh->product[i].product_name);
         printf("Product ID %d \n", dh->product[i].id);
-        printf("Product Weight %.2lf \n\n", dh->product[i].weight);
+        printf("Product Weight %.2lf \n", dh->product[i].weight);
+        printf("Product stock %u\n\n", dh->product[i].stock);
     }
 }
 
@@ -55,6 +57,7 @@ void delete_entries(handle *dh)
     printf("Delete single element [1] or whole array? [2] (every other number to abort process): ");
     scanf(" %d", &what_to_delete);
 
+    //Decide what should be deleted
     switch(what_to_delete)
     {
     case 1:
@@ -115,11 +118,11 @@ void choose(handle *dh)
 {
     char choice;
 
-    printf("Dynamic Product Memorizer 1.0 \n");
     do{
     printf("[E]nter, [D]elete, [S]how, [Q]uit: ");
     scanf(" %c", &choice);
     test_choose(&choice);
+    fflush(stdin);
 
     switch(choice)
     {
@@ -134,9 +137,9 @@ void choose(handle *dh)
              delete_entries(dh);
              break;
     }
+
     }
     while(choice != 'Q');
-
     free(dh->product);
 }
 

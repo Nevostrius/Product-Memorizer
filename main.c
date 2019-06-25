@@ -5,6 +5,7 @@
 #include <memory.h>
 #define START 3
 #include "structs.h"
+#include "help_functions.h"
 #include "products.h"
 
 int main()
@@ -14,5 +15,6 @@ int main()
     national_products.count = 0;
     national_products.product = NULL;
 
+    printf("Dynamic Product Memorizer 1.1 \n");
     choose(&national_products);
 }
