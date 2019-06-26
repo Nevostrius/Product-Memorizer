@@ -1,7 +1,7 @@
 # **Product-Memorizer**  
--> Learned to use dynamic allocation for Arrays  
--> Practice to use functions and structs  
--> Learning how to use GitHub  
+- [x] Learned to use dynamic allocation for Arrays  
+- [x] Practice to use functions and structs  
+- [x] Learning how to use GitHub  
 
 # **Future Implementations**  
 - [ ] Adding an Edit function to existing Products  
