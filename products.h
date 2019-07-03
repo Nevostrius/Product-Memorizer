@@ -1,39 +1,17 @@
 #ifndef PRODUCTS_H_INCLUDED
 #define PRODUCTS_H_INCLUDED
 
-void enter(handle *dh)
+void enter(handle *dh, int *pos)
 {
-    //Allocate Memory to Array product
-    if(dh->product == NULL)
-    {
-        printf("No memory allocated, allocating memory... \n");
-        dh->product = (article *) malloc(dh->allocation * sizeof(article));
-        if(dh->product == NULL){printf("Error allocating memory. Exit program\n"); exit(EXIT_FAILURE);}
-        printf("Memory in the size %d allocated... you may add products to memory\n\n", dh->allocation);
-    }
-
-    //Reallocate Memory for Array product if necessary
-    if(dh->count+1 > dh->allocation)
-    {
-        printf("\nResizing memory necessary...\n");
-        dh->product = (article*) realloc(dh->product, (dh->allocation+1) * sizeof(article));
-        if(dh->product == NULL){printf("Error allocating memory. Exit program\n"); exit(EXIT_FAILURE);}
-        dh->allocation++;
-        printf("Memory successfully reallocated. Memory can currently hold %d items\n", dh->allocation);
-    }
-
-    //Enter Product Info
     printf("Enter Product Name: ");
-    fgets(dh->product[dh->count].product_name, 20, stdin);
+    fgets(dh->product[*pos].product_name, 20, stdin);
     fflush(stdin);
-    unique_product_id(dh);
+    unique_product_id(dh, pos);
     printf("Enter product weight: ");
-    scanf(" %lf", &dh->product[dh->count].weight);
+    scanf(" %lf", &dh->product[*pos].weight);
     printf("Enter your product stock: ");
-    scanf(" %u", &dh->product[dh->count].stock);
-    printf("\nProduct with ID %d added.\n", dh->product[dh->count].id);
-    dh->count++;
-    printf("%d Elements in memory\n\n", dh->count);
+    scanf(" %u", &dh->product[*pos].stock);
+    printf("\nProduct with ID %d added.\n", dh->product[*pos].id);
 }
 
 void show(handle *dh)
@@ -48,7 +26,7 @@ void show(handle *dh)
     }
 }
 
-void delete_entries(handle *dh)
+handle *delete_entries(handle *dh)
 {
     int what_to_delete = 0;
     char security_check;
@@ -76,9 +54,9 @@ void delete_entries(handle *dh)
 
             if (j>=0)
             {
-                for(int i=j; i<dh->count; i++)
+                for(int i = j; i < dh->count; i++)
                 {
-                dh->product[i] = dh->product[i+1];
+                    dh->product[i] = dh->product[i+1];
                 }
 
             dh->count--;
@@ -98,28 +76,47 @@ void delete_entries(handle *dh)
             printf("Are you sure to delete everything Y/N?: ");
             scanf(" %c", &security_check);
             test_choose(&security_check);
+
             if(security_check == 'Y')
             {
-            free(dh->product);
-            dh->product = NULL;
-            dh->count = 0;
-            printf("Elements deleted and memory freed.\n\n");
+                free(dh->product);
+                dh->product = NULL;
+                dh->count = 0;
+                printf("Elements deleted and memory freed.\n\n");
             }
             else
             {
-            printf("Elements won't be deleted.\n");
+                printf("Elements won't be deleted.\n");
             }
     break;
     }
+
+    return dh;
 }
 
+void change_entries(handle *dh)
+{
+    int id;
+
+    printf("Type in the ID of the product you want to change:");
+    scanf(" %d", &id);
+    fflush(stdin);
+
+    for(int i = 0; i < dh->count; i++)
+    {
+        if (dh->product[i].id == id)
+        {
+            enter(dh, &i);
+        }
+    }
+}
 
 void choose(handle *dh)
 {
     char choice;
 
     do{
-    printf("[E]nter, [D]elete, [S]how, [Q]uit: ");
+    printf("[E]nter, [D]elete, [S]how, [C]hange [Q]uit: ");
     scanf(" %c", &choice);
     test_choose(&choice);
     fflush(stdin);
@@ -127,15 +124,23 @@ void choose(handle *dh)
     switch(choice)
     {
     case 'E':
-             enter(dh);
-             break;
+        allocate_mem(dh);
+        enter(dh, &dh->count);
+        dh->count++;
+        printf("%d Elements in memory\n\n", dh->count);
+    break;
 
     case 'S':
-             show(dh);
-             break;
+        show(dh);
+    break;
+
     case 'D':
-             delete_entries(dh);
-             break;
+        delete_entries(dh);
+    break;
+
+    case 'C':
+        change_entries(dh);
+    break;
     }
 
     }
