@@ -12,9 +12,9 @@ void unique_product_id(handle *dh, int *pos)
     printf("Enter unique product ID Number: ");
     scanf(" %d", &dh->product[*pos].id);
 
-    for (int i=0; i < *pos; i++)
+    for (int i=0; i < dh->count; i++)
     {
-        if(dh->product[i].id == dh->product[*pos].id)
+        if(dh->product[i].id == dh->product[*pos].id && i != *pos)
         {
             printf("Your product ID is not Unique. Please try again.\n");
             unique_product_id(dh, pos);
