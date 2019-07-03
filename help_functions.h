@@ -16,7 +16,6 @@ void unique_product_id(handle *dh, int *pos)
     {
         if(dh->product[i].id == dh->product[*pos].id)
         {
-            printf("ID1 %d ID2 %d", dh->product[i].id, dh->product[*pos].id);
             printf("Your product ID is not Unique. Please try again.\n");
             unique_product_id(dh, pos);
         }
