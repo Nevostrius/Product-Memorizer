@@ -4,8 +4,7 @@
 void enter(handle *dh, int *pos)
 {
     printf("Enter Product Name: ");
-    fgets(dh->product[*pos].product_name, 20, stdin);
-    fflush(stdin);
+    scanf(" %s", dh->product[*pos].product_name);
     unique_product_id(dh, pos);
     printf("Enter product weight: ");
     scanf(" %lf", &dh->product[*pos].weight);
@@ -14,12 +13,12 @@ void enter(handle *dh, int *pos)
     printf("\nProduct with ID %d added.\n", dh->product[*pos].id);
 }
 
-void show(handle *dh)
+void print(handle *dh)
 {
     for(int i=0; i<dh->count; i++)
     {
         printf("\nMemory of product list at position %d\n", i+1);
-        printf("Product Name = %s", dh->product[i].product_name);
+        printf("Product Name = %s \n", dh->product[i].product_name);
         printf("Product ID %d \n", dh->product[i].id);
         printf("Product Weight %.2lf \n", dh->product[i].weight);
         printf("Product stock %u\n\n", dh->product[i].stock);
@@ -111,12 +110,81 @@ void change_entries(handle *dh)
     }
 }
 
+void save_data(handle *dh, FILE *fp)
+{
+    int counting, i = 0;
+
+    fp = fopen("Output.txt", "at+");
+
+    if (fp == NULL)
+        printf("Error creating File\n");
+
+    for (i = dh->save_counter; i < dh->count; i++)
+    {
+        counting = fprintf(fp, "%s;%d;%.2lf;%u\n", dh->product[i].product_name, dh->product[i].id, dh->product[i].weight, dh->product[i].stock);
+        if (counting == -1)
+            printf("Error writing content");
+    }
+
+    dh->save_counter = i;
+
+    fclose(fp);
+}
+
+int read_data(handle *dh, FILE *fp)
+{
+    char choice;
+    int n = 0;
+
+    fp = fopen("Output.txt", "r+");
+    if (fp == NULL)
+        return 0;
+
+    printf("Do you want to import a file? Y/N: ");
+    scanf(" %c", &choice);
+    test_choose(&choice);
+
+    if(choice == 'Y')
+    {
+        while(!feof(fp))
+        {
+            allocate_mem(dh);
+            n = fscanf(fp, " %[^;];%d;%lf;%u", dh->product[dh->count].product_name, &dh->product[dh->count].id, &dh->product[dh->count].weight, &dh->product[dh->count].stock);
+
+            if (n == -1)
+            {
+                break;
+            }
+
+            if (n != 4)
+            {
+                printf("Error importing file. Please check line %d. Renaming your input file and continue...\n\n", dh->count+1);
+                fclose(fp);
+                if (rename("Output.txt", "Output_error.txt"))
+                    printf("Error renaming \n");
+                return 0;
+            }
+            dh->count++;
+        }
+        fclose(fp);
+        dh->save_counter = dh->count;
+        return dh->count;
+    }
+
+    fclose(fp);
+    return 0;
+}
+
 void choose(handle *dh)
 {
     char choice;
+    FILE *fp = NULL;
+
+    read_data(dh, fp);
+    void rewind(FILE *fp);
 
     do{
-    printf("[E]nter, [D]elete, [S]how, [C]hange [Q]uit: ");
+    printf("[E]nter, [D]elete, [P]rint, [C]hange [Q]uit [S]ave: ");
     scanf(" %c", &choice);
     test_choose(&choice);
     fflush(stdin);
@@ -130,8 +198,8 @@ void choose(handle *dh)
         printf("%d Elements in memory\n\n", dh->count);
     break;
 
-    case 'S':
-        show(dh);
+    case 'P':
+        print(dh);
     break;
 
     case 'D':
@@ -140,6 +208,10 @@ void choose(handle *dh)
 
     case 'C':
         change_entries(dh);
+    break;
+
+    case 'S':
+        save_data(dh, fp);
     break;
     }
 

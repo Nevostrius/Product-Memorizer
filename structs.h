@@ -14,6 +14,7 @@ typedef struct
     article *product;
     int allocation;
     int count;
+    int save_counter;
 }handle;
 
 

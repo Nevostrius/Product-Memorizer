@@ -10,10 +10,7 @@
 
 int main()
 {
-    handle national_products;
-    national_products.allocation = START;
-    national_products.count = 0;
-    national_products.product = NULL;
+    handle national_products = {NULL, START, 0, 0};
 
     printf("Dynamic Product Memorizer 1.1 \n");
     choose(&national_products);
